@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- FONT -->
+    <!-- <link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""> -->
+
+    <title>top10Page</title>
+    <style>
+    body, html {
+        margin: 0px;
+        font-family: sans-serif;
+        /* background-color: linen; */
+        /* background-color: rgba(231, 223, 221, 1); */
+        /* background-color: rgba(6, 47, 79, 0.6); */
+        /* font-family: bodoni-w01-poster,bodoni-poster-w10,fantasy; */
+        /* background: url("https://static.wixstatic.com/media/3be8884199474b4d923408f7392ee35e.png/v1/fill/w_200,h_200,al_c/3be8884199474b4d923408f7392ee35e.png");
+        background-color: rgb(51, 164, 122); */
+    }
+    #wrapper {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+    }
+    #headerWrapper {
+        position: sticky;
+        height: 50px;
+        /* background-color: linen; */
+        background-color: rgba(6, 47, 79, 1);
+        /* outline: 1px solid black; */
+        margin: 0px;
+    }
+    #diceLogo {
+        height: 35px;
+        width: 35px;
+    }
+    #logoLetter {
+        display: inline-block;
+        position: sticky;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-40%);
+        width: 125px;
+        margin: 0px;
+    }
+    #top10Title {
+        font-size: 2em;
+        font-weight: 900;
+        letter-spacing: 20px;
+        margin: 20px;
+        text-align: center;
+        outline: 3px solid black;
+    }
+    #top10ListWrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    .eachRankWrapper {
+        flex: 1;
+        margin: 0 10px 20px 10px;
+    }
+    .eachRankLink {
+        text-align: center;
+        color: rgba(0, 0, 0, 0.8);
+        text-decoration: none;
+    }
+    .eachHeader {
+        position: relative;
+        height: 40px;
+        /* background-color: rgba(184, 38, 1, 1); */
+        background-color: rgba(6, 47, 79, 1);
+        /* outline: 1px solid red; */
+    }
+    .rankNum {
+        position: absolute;
+        left: 20px;
+        top: -20px;
+        width: 40px;
+        height: 40px;
+        
+        font-weight: 900;
+        line-height: 40px;
+        border: 2px solid gold;
+        /* border-radius: 50%; */
+        background-color: yellow;
+    }
+    .gameName {
+        font-size: 15px;
+        line-height: 40px;
+        font-weight: bold;
+        color: white;
+    }
+    .eachPicWrapper{
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+    }
+    .eachImg {
+        width: 100%;
+    }
+    .eachDesc {
+        font-size: 12px;
+        text-align: left;
+        padding: 10px 20px 10px 20px;
+        /* background-color: white; */
+        background-color: rgba(231, 223, 221, 0.5);
+        /* border: 1px solid blue; */
+    }
+    </style>
+
+</head>
+<body>
+    <div id="wrapper">
+        <div id="headerWrapper">
+                <img id="diceLogo" src="https://static.wixstatic.com/media/8b9df1_5839087180f149749d17ea0210e54350.png/v1/fill/w_460,h_402,al_c,usm_0.66_1.00_0.01/8b9df1_5839087180f149749d17ea0210e54350.png"/>
+                <h3 id="logoLetter">The Dice Latté</h3>
+        </div>
+        <div id="top10Title">TOP 10</div>
+        <div id="top10ListWrapper"></div>
+    </div>
+
+<script>
+/*  [ PROCESS ]
+    1. THIS PAGE IS LINKED FROM THE SEARCH PAGE'S ANCHOR WHICH IS TOP 10    ㅇ
+    2. GET DATA IN JSON FORM FROM API WHICH IS top10API.php     ㅇ
+    3. With that data, show all information to HTMl page    ㅇ
+
+    AFter that,
+    4. When a client clicks one from top 10 list, it goes to detailPage.php ( Dealing with CLICK FUCTION !!! )
+*/
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var inObj = JSON.parse(this.responseText); // OBJECT form
+            // console.log(inObj);
+
+            var insideList = document.getElementById("top10ListWrapper")
+            insideList.innerHTML = "";
+
+            // BEFORE 
+            // for( var i = 0 ; i < inObj.length ; i++ ) {
+            //     insideList.innerHTML += "<div class='eachRankWrapper' >"
+            //                                 + "<div class='rankNum'>" + (i+1) + "</div>"
+            //                                 + "<form id='rank" + (i+1) + "'" + " action='detailPage.php' method='POST'> "
+            //                                     + "<div class='eachRankLink'>" + inObj[i].name + "</div>" 
+            //                                     + "<input type=\"hidden\" name=\"idNum\" value=\"" + inObj[i].id + "\">"
+            //                                 + "</form>"
+            //                           + "</div>";
+
+            // }
+
+            // // FOR MAKING EACH RANK TO CONNECT TO detailAPI.php 
+            // for( let i = 0 ; i < inObj.length ; i++ ) {
+            //     var thisNum = document.getElementById( "rank" + (i+1) ).id;
+            //     document.getElementById( "rank" + (i+1) ).addEventListener("click", function() {
+            //         thisNum = thisNum.substr(4);
+            //         document.getElementById( "rank" + (i+1) ).submit();
+            //     });
+            //     // console.log("\"rank" + (i+1) + "\"");
+            // }
+
+            //AFTER
+            var newStr = "";
+            for( var i = 0 ; i < inObj.length ; i++ ) {
+                newStr += "<div class='eachRankWrapper' >"
+                                        + "<a class='eachRankLink' href='detailPage.php?idNum="+ inObj[i].id + "'>"
+                                        + "<div class='eachPicWrapper'><img class='eachImg' src='https://cf.geekdo-images.com/images/pic3956079_md.jpg'\></div>"
+                                        + "<div class='eachHeader'>"
+                                        + "<div class='rankNum'>" + (i+1) + "</div>"
+                                        + "<div class='gameName'>" + inObj[i].name + "</div>"
+                                        + "</div>"
+                                        + "<div class='eachDesc'>"
+                                        + "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                        + "</div>"
+                                        + "</a>"
+                                      + "</div>";
+            }
+            insideList.innerHTML = newStr;
+        }
+    };
+    xhttp.open("GET", "top10API.php"); 
+    xhttp.send();
+</script>
+</body>
+</html>
